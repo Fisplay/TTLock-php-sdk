@@ -37,7 +37,7 @@ class Passcode extends TTLockAbstract
 	 * @throws \GuzzleHttp\Exception\GuzzleException | \Exception
 	 * @author 韩文博
 	 */
-	public function get( int $lockId, int $keyboardPwdVersion, int $keyboardPwdType, int $startDate, int $endDate, int $date ) : array
+	public function get( int $lockId, string $keyboardPwdName, int $keyboardPwdVersion, int $keyboardPwdType, ?int $startDate, ?int $endDate, int $date ) : array
 	{
 		$response = $this->client->request( 'POST', '/v3/keyboardPwd/get', [
 			'form_params' => [
@@ -100,7 +100,7 @@ class Passcode extends TTLockAbstract
 	 * @throws \GuzzleHttp\Exception\GuzzleException | \Exception
 	 * @author 韩文博
 	 */
-	public function change( int $lockId, int $keyboardPwdId, string $newKeyboardPwd, int $startDate, int $endDate, int $changeType, int $date ) : array
+	public function change( int $lockId, int $keyboardPwdId, string $newKeyboardPwd, ?int $startDate, ?int $endDate, int $changeType, int $date ) : array
 	{
 		$response = $this->client->request( 'POST', '/v3/keyboardPwd/change', [
 			'form_params' => [
@@ -135,7 +135,7 @@ class Passcode extends TTLockAbstract
 	 * @throws \GuzzleHttp\Exception\GuzzleException | \Exception
 	 * @author 韩文博
 	 */
-	public function add( int $lockId, string $keyboardPwd, int $startDate, int $endDate, int $addType, int $date ) : array
+	public function add( int $lockId, string $keyboardPwd, int $startDate, ?int $endDate, ?int $addType, int $date ) : array
 	{
 		$response = $this->client->request( 'POST', '/v3/keyboardPwd/add', [
 			'form_params' => [
