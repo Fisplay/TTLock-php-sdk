@@ -54,6 +54,7 @@ class TTLock
 			"oauth2"   => Oauth2::class,
 			"key"      => Key::class,
 			"passcode" => Passcode::class,
+			"group"    => Group::class,
 		];
 
 	/**
