@@ -8,27 +8,24 @@
   "license": "Apache-2.0",
   "require": {
     "php": ">=7.2",
-    "guzzlehttp/guzzle": "^6.2"
+    "guzzlehttp/guzzle": "^7.4"
   },
   "require-dev": {
-    "php": ">=7.2",
-    "eaglewu/swoole-ide-helper": "dev-master"
+    "php": ">=7.2"
   },
   "authors": [
     {
       "name": "韩文博",
       "email": "9476400@qq.com"
+    },
+    {
+      "name": "Jaakko Mantila",
+      "email": "jaakko.mantila@fisplay.com"
     }
   ],
   "autoload": {
     "psr-4": {
       "ttlock\\": "src/"
-    }
-  },
-  "repositories": {
-    "packagist": {
-      "type": "composer",
-      "url": "https://packagist.laravel-china.org"
     }
   }
 }
