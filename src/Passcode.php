@@ -70,7 +70,7 @@ class Passcode extends TTLockAbstract
 	 */
 	public function delete( int $lockId, int $keyboardPwdId, int $deleteType, int $date ):array
 	{
-		$response = $this->client->request( 'POST', '/v3/keyboardPwd/delete', [
+		$response = $this->client->request( 'POST', '/v3/lock/keyboardPwd/delete', [
 			'form_params' => [
 				'clientId'      => $this->clientId,
 				'accessToken'   => $this->accessToken,
