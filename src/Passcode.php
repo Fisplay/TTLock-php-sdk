@@ -37,7 +37,7 @@ class Passcode extends TTLockAbstract
 	 * @throws \GuzzleHttp\Exception\GuzzleException | \Exception
 	 * @author 韩文博
 	 */
-	public function get( int $lockId, string $keyboardPwdName, int $keyboardPwdVersion, int $keyboardPwdType, ?int $startDate, ?int $endDate, int $date ) : array
+	public function get( int $lockId, int $keyboardPwdVersion, int $keyboardPwdType, ?int $startDate, ?int $endDate, int $date ) : array
 	{
 		$response = $this->client->request( 'POST', '/v3/keyboardPwd/get', [
 			'form_params' => [
@@ -147,6 +147,35 @@ class Passcode extends TTLockAbstract
 				'startDate'   => $startDate,
 				'endDate'     => $endDate,
 				'addType'     => $addType,
+				'date'        => $date,
+			],
+		] );
+		$body     = json_decode( $response->getBody()->getContents(), true );
+		if( $response->getStatusCode() === 200 && !isset( $body['errcode'] ) ){
+			return (array)$body;
+		} else{
+			throw new \Exception( "errcode {$body['errcode']} errmsg {$body['errmsg']} errmsg : {$body['errmsg']}" );
+		}
+	}
+
+
+	/**
+	 * @param int $lockId
+	 * @param int $pageNo
+	 * @param int $pageSize
+	 * @param int $date
+	 * @return array
+	 * @throws \GuzzleHttp\Exception\GuzzleException | \Exception
+	 */
+	public function list( int $lockId, int $pageNo, int $pageSize, int $date ) : array
+	{
+		$response = $this->client->request( 'POST', '/v3/keyboardPwd/list', [
+			'form_params' => [
+				'clientId'    => $this->clientId,
+				'accessToken' => $this->accessToken,
+				'lockId'      => $lockId,
+				'pageNo'      => $pageNo,
+				'pageSize'    => $pageSize,
 				'date'        => $date,
 			],
 		] );
