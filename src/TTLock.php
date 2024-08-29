@@ -42,7 +42,7 @@ class TTLock
 		$this->clientId     = $clientId;
 		$this->clientSecret = $clientSecret;
 		$this->client       = new \GuzzleHttp\Client( [
-			'base_uri' => 'https://api.ttlock.com.cn',
+			'base_uri' => 'https://euapi.ttlock.com',
 		] );
 	}
 
