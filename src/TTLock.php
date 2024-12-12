@@ -55,7 +55,7 @@ class TTLock
 			"key"      => Key::class,
 			"passcode" => Passcode::class,
 			"group"    => Group::class,
-			"identitycard" => IdentityCard::class,
+			"identityCard" => IdentityCard::class,
 		];
 
 	/**
