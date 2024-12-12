@@ -22,7 +22,7 @@ class IdentityCard extends TTLockAbstract
 	 * @return array
 	 * @throws \GuzzleHttp\Exception\GuzzleException | \Exception
 	 */
-	public function delete( int $lockId, int $icCardId, int $deleteType, int $date ):array
+	public function delete( int $lockId, int $icCardId, ?int $deleteType, int $date ):array
 	{
 		$response = $this->client->request('POST', '/v3/identityCard/delete', [
 			'form_params' => [
@@ -34,6 +34,40 @@ class IdentityCard extends TTLockAbstract
 				'date'          => $date,
 			],
 		]);
+		$body = json_decode( $response->getBody()->getContents(), true );
+		if( $response->getStatusCode() === 200 && (!isset($body['errcode']) || $body['errcode'] === 0)) {
+			return (array)$body;
+		} else{
+			throw new \Exception( "errcode {$body['errcode']} errmsg {$body['errmsg']} errmsg : {$body['errmsg']}" );
+		}
+	}
+
+	/**
+	 * @method GET
+	 * @param int    $lockId
+	 * @param string $icCard
+	 * @param int    $startDate
+	 * @param int    $endDate
+	 * @param int    $addType
+	 * @param int    $date
+	 * @return array
+	 * @throws \GuzzleHttp\Exception\GuzzleException | \Exception
+	 */
+	public function add( int $lockId, string $icCard, ?string $icCardName, int $startDate, int $endDate, ?int $addType, int $date ) : array
+	{
+		$response = $this->client->request( 'POST', '/v3/identityCard/add', [
+			'form_params' => [
+				'clientId'    => $this->clientId,
+				'accessToken' => $this->accessToken,
+				'lockId'      => $lockId,
+				'cardNumber'  => $icCard,
+				'cardName' 	  => $icCardName,
+				'startDate'   => $startDate,
+				'endDate'     => $endDate,
+				'addType'     => $addType,
+				'date'        => $date,
+			],
+		] );
 		$body = json_decode( $response->getBody()->getContents(), true );
 		if( $response->getStatusCode() === 200 && !isset( $body['errcode'] ) ){
 			return (array)$body;
@@ -53,23 +87,22 @@ class IdentityCard extends TTLockAbstract
 	 * @return array
 	 * @throws \GuzzleHttp\Exception\GuzzleException | \Exception
 	 */
-	public function add( int $lockId, string $icCard, string $icCardName, int $startDate, ?int $endDate, ?int $addType, int $date ) : array
+	public function updateValidity( int $lockId, string $icCard, int $startDate, int $endDate, ?int $changeType, int $date ) : array
 	{
-		$response = $this->client->request( 'POST', '/v3/identityCard/add', [
+		$response = $this->client->request( 'POST', '/v3/identityCard/changePeriod', [
 			'form_params' => [
 				'clientId'    => $this->clientId,
 				'accessToken' => $this->accessToken,
 				'lockId'      => $lockId,
 				'cardNumber'  => $icCard,
-				'cardName' 	  => $icCardName,
 				'startDate'   => $startDate,
 				'endDate'     => $endDate,
-				'addType'     => $addType,
+				'changeType'  => $changeType,
 				'date'        => $date,
 			],
 		] );
 		$body = json_decode( $response->getBody()->getContents(), true );
-		if( $response->getStatusCode() === 200 && !isset( $body['errcode'] ) ){
+		if( $response->getStatusCode() === 200 && (!isset($body['errcode']) || $body['errcode'] === 0)) {
 			return (array)$body;
 		} else{
 			throw new \Exception( "errcode {$body['errcode']} errmsg {$body['errmsg']} errmsg : {$body['errmsg']}" );
