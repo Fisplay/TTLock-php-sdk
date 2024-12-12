@@ -87,14 +87,14 @@ class IdentityCard extends TTLockAbstract
 	 * @return array
 	 * @throws \GuzzleHttp\Exception\GuzzleException | \Exception
 	 */
-	public function updateValidity( int $lockId, string $icCard, int $startDate, int $endDate, ?int $changeType, int $date ) : array
+	public function updateValidity( int $lockId, int $cardId, int $startDate, int $endDate, ?int $changeType, int $date ) : array
 	{
 		$response = $this->client->request( 'POST', '/v3/identityCard/changePeriod', [
 			'form_params' => [
 				'clientId'    => $this->clientId,
 				'accessToken' => $this->accessToken,
 				'lockId'      => $lockId,
-				'cardNumber'  => $icCard,
+				'cardId'  	  => $cardId,
 				'startDate'   => $startDate,
 				'endDate'     => $endDate,
 				'changeType'  => $changeType,
