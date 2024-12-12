@@ -19,12 +19,11 @@ class Oauth2 extends TTLockAbstract
 	/**
 	 * @param string $username
 	 * @param string $password
-	 * @param string $redirect_uri
 	 * @return array
 	 * @throws \GuzzleHttp\Exception\GuzzleException | \Exception
 	 * @author 韩文博
 	 */
-	public function token( string $username, string $password, string $redirect_uri )
+	public function token( string $username, string $password )
 	{
 		$response = $this->client->request( 'POST', '/oauth2/token', [
 			'form_params' => [
@@ -32,8 +31,7 @@ class Oauth2 extends TTLockAbstract
 				'client_secret' => $this->clientSecret,
 				'grant_type'    => 'password',
 				'username'      => $username,
-				'password'      => md5( $password ),
-				'redirect_uri'  => $redirect_uri,
+				'password'      => md5( $password )
 			],
 		] );
 		$body     = json_decode( $response->getBody()->getContents(), true );
