@@ -80,8 +80,8 @@ class Passcode extends TTLockAbstract
 				'date'          => $date,
 			],
 		] );
-		$body     = json_decode( $response->getBody()->getContents(), true );
-		if( $response->getStatusCode() === 200 ){
+		$body = json_decode( $response->getBody()->getContents(), true );
+		if( $response->getStatusCode() === 200 && (!isset($body['errcode']) || $body['errcode'] === 0)) {
 			return ['status' => 'ok'];
 		} else{
 			throw new \Exception( "errcode {$body['errcode']} errmsg {$body['errmsg']} errmsg : {$body['errmsg']}" );
