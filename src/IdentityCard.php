@@ -55,7 +55,57 @@ class IdentityCard extends TTLockAbstract
 	 */
 	public function add( int $lockId, string $icCard, ?string $icCardName, int $startDate, int $endDate, ?int $addType, int $date ) : array
 	{
-		$response = $this->client->request( 'POST', '/v3/identityCard/add', [
+		return $this->create(
+			'/v3/identityCard/add',
+			$lockId,
+			$icCard,
+			$icCardName,
+			$startDate,
+			$endDate,
+			$addType,
+			$date
+		);
+	}
+
+	/**
+	 * @method GET
+	 * @param int    $lockId
+	 * @param string $icCard
+	 * @param int    $startDate
+	 * @param int    $endDate
+	 * @param int    $addType
+	 * @param int    $date
+	 * @return array
+	 * @throws \GuzzleHttp\Exception\GuzzleException | \Exception
+	 */
+	public function addForReversedCardNumber( int $lockId, string $icCard, ?string $icCardName, int $startDate, int $endDate, ?int $addType, int $date ) : array
+	{
+		return $this->create(
+			'/v3/identityCard/addForReversedCardNumber',
+			$lockId,
+			$icCard,
+			$icCardName,
+			$startDate,
+			$endDate,
+			$addType,
+			$date
+		);
+	}
+
+	/**
+	 * @param string $endpoint
+	 * @param integer $lockId
+	 * @param string $icCard
+	 * @param string|null $icCardName
+	 * @param integer $startDate
+	 * @param integer $endDate
+	 * @param integer|null $addType
+	 * @param integer $date
+	 * @return array
+	 */
+	protected function create(string $endpoint, int $lockId, string $icCard, ?string $icCardName, int $startDate, int $endDate, ?int $addType, int $date): array
+	{
+		$response = $this->client->request('POST', $endpoint, [
 			'form_params' => [
 				'clientId'    => $this->clientId,
 				'accessToken' => $this->accessToken,
@@ -67,10 +117,12 @@ class IdentityCard extends TTLockAbstract
 				'addType'     => $addType,
 				'date'        => $date,
 			],
-		] );
+		]);
+
 		$body = json_decode( $response->getBody()->getContents(), true );
+
 		if( $response->getStatusCode() === 200 && !isset( $body['errcode'] ) ){
-			return (array)$body;
+			return (array) $body;
 		} else{
 			throw new \Exception( "errcode {$body['errcode']} errmsg {$body['errmsg']} errmsg : {$body['errmsg']}" );
 		}
