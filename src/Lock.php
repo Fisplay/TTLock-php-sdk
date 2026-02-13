@@ -453,4 +453,33 @@ class Lock extends TTLockAbstract
 			throw new \Exception( "errcode {$body['errcode']} errmsg {$body['errmsg']} errmsg : {$body['errmsg']}" );
 		}
 	}
+
+	/**
+	 * Configure passage mode for a lock. Passage mode keeps the lock unlocked during configured time periods.
+	 * API doc: https://euopen.ttlock.com/document/doc?urlName=cloud%2Flock%2FconfigurePassageModeEn.html
+	 *
+	 * @param int    $lockId             Lock ID
+	 * @param string $passageModeConfig  Passage mode configuration (JSON string; structure per EU API doc)
+	 * @param int    $date               Current timestamp in milliseconds
+	 * @return bool
+	 * @throws \GuzzleHttp\Exception\GuzzleException | \Exception
+	 */
+	public function configurePassageMode( int $lockId, string $passageModeConfig, int $date ) : bool
+	{
+		$response = $this->client->request( 'POST', '/v3/lock/configurePassageMode', [
+			'form_params' => [
+				'clientId'          => $this->clientId,
+				'accessToken'       => $this->accessToken,
+				'lockId'            => $lockId,
+				'passageModeConfig' => $passageModeConfig,
+				'date'              => $date,
+			],
+		] );
+		$body     = json_decode( $response->getBody()->getContents(), true );
+		if( $response->getStatusCode() === 200 && isset( $body['errcode'] ) && $body['errcode'] === 0 ){
+			return true;
+		} else{
+			throw new \Exception( "errcode {$body['errcode']} errmsg {$body['errmsg']} errmsg : {$body['errmsg']}" );
+		}
+	}
 }
