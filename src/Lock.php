@@ -458,24 +458,45 @@ class Lock extends TTLockAbstract
 	 * Configure passage mode for a lock. Passage mode keeps the lock unlocked during configured time periods.
 	 * API doc: https://euopen.ttlock.com/document/doc?urlName=cloud%2Flock%2FconfigurePassageModeEn.html
 	 *
-	 * @param int    $lockId             Lock ID
-	 * @param string $passageModeConfig  Passage mode configuration (JSON string; structure per EU API doc)
-	 * @param int    $date               Current timestamp in milliseconds
+	 * @param int $lockId
+	 * @param int $passageMode
+	 * @param array|null $cycleConfig
+	 * @param int|null $autoUnlock
+	 * @param int $type
+	 * @param int $date
 	 * @return bool
 	 * @throws \GuzzleHttp\Exception\GuzzleException | \Exception
 	 */
-	public function configurePassageMode( int $lockId, string $passageModeConfig, int $date ) : bool
-	{
+	public function configurePassageMode(
+		int $lockId,
+		int $passageMode,
+		?array $cycleConfig,
+		?int $autoUnlock,
+		int $type,
+		int $date
+	): bool {
+		$formaParams = [
+			'clientId'          => $this->clientId,
+			'accessToken'       => $this->accessToken,
+			'lockId'            => $lockId,
+			'passageMode'       => $passageMode,
+			'type'              => $type,
+			'date'              => $date,
+		];
+
+		if ($cycleConfig) {
+			$formaParams['cycleConfig'] = json_encode($cycleConfig);
+		}
+		if ($autoUnlock) {
+			$formaParams['autoUnlock'] = $autoUnlock;
+		}
+
 		$response = $this->client->request( 'POST', '/v3/lock/configurePassageMode', [
-			'form_params' => [
-				'clientId'          => $this->clientId,
-				'accessToken'       => $this->accessToken,
-				'lockId'            => $lockId,
-				'passageModeConfig' => $passageModeConfig,
-				'date'              => $date,
-			],
-		] );
-		$body     = json_decode( $response->getBody()->getContents(), true );
+			'form_params' => $formaParams,
+		]);
+
+		$body = json_decode( $response->getBody()->getContents(), true );
+
 		if( $response->getStatusCode() === 200 && isset( $body['errcode'] ) && $body['errcode'] === 0 ){
 			return true;
 		} else{
