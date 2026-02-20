@@ -485,7 +485,7 @@ class Lock extends TTLockAbstract
 		];
 
 		if ($cycleConfig) {
-			$formaParams['cycleConfig'] = json_encode($cycleConfig);
+			$formaParams['cyclicConfig'] = json_encode($cycleConfig);
 		}
 		if ($autoUnlock) {
 			$formaParams['autoUnlock'] = $autoUnlock;
